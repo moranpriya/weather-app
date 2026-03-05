@@ -2,57 +2,12 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <title>Weather App</title>
 
-<style>
-
-body{
-    font-family: Arial, sans-serif;
-    text-align:center;
-    background:#eef2f7;
-    padding-top:80px;
-}
-
-.container{
-    width:380px;
-    margin:auto;
-    background:white;
-    padding:30px;
-    border-radius:10px;
-    box-shadow:0 6px 20px rgba(0,0,0,0.15);
-}
-
-input{
-    padding:10px;
-    width:80%;
-    margin-bottom:10px;
-    border:1px solid #ccc;
-    border-radius:5px;
-}
-
-button{
-    padding:10px 15px;
-    background:#007BFF;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#0056b3;
-}
-
-#WeatherResult{
-    margin-top:20px;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
 
 </head>
-
 
 <body>
 
@@ -62,91 +17,13 @@ button:hover{
 
 <input type="text" id="cityInput" placeholder="Enter city name">
 
-<br>
-
-<button id="getWeatherBtn">
-Get Weather
-</button>
+<button id="getWeatherBtn">Get Weather</button>
 
 <div id="WeatherResult"></div>
 
 </div>
 
-
-<script>
-
-const apiKey = "50e19082ac8ca9d7bb31065602702659";
-
-const button = document.getElementById("getWeatherBtn");
-const result = document.getElementById("WeatherResult");
-const cityInput = document.getElementById("cityInput");
-
-
-button.addEventListener("click", async () => {
-
-    let city = cityInput.value.trim();
-
-    if(city === ""){
-        result.innerHTML = "Please enter a city name.";
-        return;
-    }
-
-    result.innerHTML = "Loading...";
-
-    try{
-
-        const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
-        );
-
-        const data = await response.json();
-
-        if(data.cod !== 200){
-            result.innerHTML = data.message;
-            return;
-        }
-
-        const { name, main, weather, sys, rain } = data;
-
-        const sunrise =
-        new Date(sys.sunrise * 1000).toLocaleTimeString();
-
-        const sunset =
-        new Date(sys.sunset * 1000).toLocaleTimeString();
-
-        const rainChance =
-        rain ? (rain["1h"] || 0) + " mm (last hour)" : "No rain";
-
-        result.innerHTML = `
-
-            <h3>${name}</h3>
-
-            <p><strong>Temperature:</strong> ${main.temp} °C</p>
-
-            <p><strong>Condition:</strong> ${weather[0].description}</p>
-
-            <p><strong>Humidity:</strong> ${main.humidity}%</p>
-
-            <p><strong>Rain:</strong> ${rainChance}</p>
-
-            <p><strong>Sunrise:</strong> ${sunrise}</p>
-
-            <p><strong>Sunset:</strong> ${sunset}</p>
-
-        `;
-
-    }
-
-    catch(error){
-
-        result.innerHTML =
-        "Error fetching weather data: " + error.message;
-
-    }
-
-});
-
-</script>
+<script src="script.js"></script>
 
 </body>
 
